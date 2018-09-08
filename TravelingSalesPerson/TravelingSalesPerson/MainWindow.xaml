@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TravelingSalesPerson"
         mc:Ignorable="d"
-        Title="Traveling Sales Person - Brute Force Solution" Height="466.598" Width="852.561">
+        Title="Traveling Sales Person" Height="466.598" Width="852.561">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
