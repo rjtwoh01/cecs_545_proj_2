@@ -123,6 +123,20 @@ namespace TravelingSalesPerson
             return finalList;
         }
 
+        public List<Point> BFS()
+        {
+            List<Point> finalList = new List<Point>();
+
+            return finalList;
+        }
+
+        public List<Point> DFS()
+        {
+            List<Point> finalList = new List<Point>();
+
+            return finalList;
+        }
+
         #region Permutation
 
         //The following two functions are implemented from: https://www.codeproject.com/Articles/43767/A-C-List-Permutation-Iterator

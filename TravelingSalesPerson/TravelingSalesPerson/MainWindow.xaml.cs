@@ -19,14 +19,17 @@ namespace TravelingSalesPerson
         private Canvas canvas;
         private Viewbox viewbox;
         private TSP tsp;
+        private string type;
 
 
         public MainWindow()
         {
             InitializeComponent();
             tspFileName = "";
+            type = "";
             hideRunTime();
             hideSolveButton();
+            hideType();
             tspPoints = new List<Point>();
         }
 
@@ -167,6 +170,18 @@ namespace TravelingSalesPerson
             this.UpdateLayout();
         }
 
+        public void displayType()
+        {
+            this.btnSelectTSPType.Visibility = Visibility.Visible;
+            this.UpdateLayout();
+        }
+
+        public void hideType()
+        {
+            this.btnSelectTSPType.Visibility = Visibility.Hidden;
+            this.UpdateLayout();
+        }
+
         #endregion
 
         #region UI Events
@@ -174,6 +189,7 @@ namespace TravelingSalesPerson
         //Slightly modified for my purposes from: https://stackoverflow.com/questions/10315188/open-file-dialog-and-select-a-file-using-wpf-controls-and-c-sharp
         private void btnFileUpload_Click(object sender, RoutedEventArgs e)
         {
+            hideSolveButton();
             emptyCanvas();
             OpenFileDialog dlg = new OpenFileDialog();
 
@@ -189,24 +205,60 @@ namespace TravelingSalesPerson
                 populatePoints();
             }
 
-            hideRunTime();
-            showSolveButton();
+            displayType();
+            hideRunTime();            
         }
 
 
         private void btnSolve_Click(object sender, RoutedEventArgs e)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            List<Point> tempResult = tsp.BruteForce();
-            sw.Stop();
+            if (type == "bruteForce")
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                List<Point> tempResult = tsp.BruteForce();
+                sw.Stop();
 
-            TimeSpan elapsedTime = sw.Elapsed;
-            string shortestDistance = String.Format("{0:0.00}", tsp.shortestDistance);
-            this.lblRunTime.Content = "Distance: "+ shortestDistance + "\nRun Time: " + elapsedTime.ToString();
+                TimeSpan elapsedTime = sw.Elapsed;
+                string shortestDistance = String.Format("{0:0.00}", tsp.shortestDistance);
+                this.lblRunTime.Content = "Distance: " + shortestDistance + "\nRun Time: " + elapsedTime.ToString();
 
-            displayRunTime();
-            drawLines(tempResult);
+                displayRunTime();
+                drawLines(tempResult);
+            }
+            else
+            {
+                MessageBox.Show(type + " is not implemented yet");
+            }
         }
+
+        private void btnSelectTSPType_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void bruteForceClick(object sender, RoutedEventArgs e)
+        {
+            showSolveButton();
+            type = "bruteForce";
+            Debug.WriteLine(type);
+        }
+
+        private void bfsClick(object sender, RoutedEventArgs e)
+        {
+            showSolveButton();
+            type = "bfs";
+            Debug.WriteLine(type);
+        }
+
+        private void dfsClick(object sender, RoutedEventArgs e)
+        {
+            showSolveButton();
+            type = "dfs";
+            Debug.WriteLine(type);
+        }
+
 
         #endregion
     }

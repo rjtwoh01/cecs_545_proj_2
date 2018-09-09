@@ -12,9 +12,18 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="btnFileUpload" Content="Select TSP File" HorizontalAlignment="Left" Height="31" Margin="10,10,0,0" VerticalAlignment="Top" Width="111" Click="btnFileUpload_Click"/>
-        <Button x:Name="btnSolve" Content="Solve" HorizontalAlignment="Left" Height="31" Margin="129,10,0,0" VerticalAlignment="Top" Width="111" Click="btnSolve_Click"/>
-        <Label x:Name="lblRunTime" Content="" HorizontalAlignment="Left" Margin="254,10,0,0" VerticalAlignment="Top" Width="528" Height="47"/>        
+        <Button x:Name="btnSolve" Content="Solve" HorizontalAlignment="Left" Height="31" Margin="244,10,0,0" VerticalAlignment="Top" Width="111" Click="btnSolve_Click"/>
+        <Label x:Name="lblRunTime" Content="" HorizontalAlignment="Left" Margin="394,10,0,0" VerticalAlignment="Top" Width="420" Height="47"/>        
         <Grid x:Name="mainGrid" HorizontalAlignment="Left" Height="364" Margin="10,62,0,0" VerticalAlignment="Top" Width="825"/>
+        <Button x:Name="btnSelectTSPType" Content="Select Type" HorizontalAlignment="Left" Height="31" Margin="127,10,0,0" VerticalAlignment="Top" Width="111" Click="btnSelectTSPType_Click">
+            <Button.ContextMenu>
+                <ContextMenu >
+                    <MenuItem Header="Brute Force" Click="bruteForceClick"/>
+                    <MenuItem Header="DFS" Click="dfsClick"/>
+                    <MenuItem Header="BFS" Click="bfsClick"/>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
 
     </Grid>
 </Window>
