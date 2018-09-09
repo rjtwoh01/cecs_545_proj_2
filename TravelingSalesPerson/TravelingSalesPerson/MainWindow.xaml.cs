@@ -113,9 +113,6 @@ namespace TravelingSalesPerson
 
         public void drawLines(List<Point> fastestRoute)
         {
-            Polygon pathLine = new Polygon();
-            pathLine.Stroke = Brushes.Black;
-
             Ellipse ellipse = canvas.Children[0] as Ellipse;
             if (ellipse != null)
             {
@@ -127,14 +124,65 @@ namespace TravelingSalesPerson
                 if ((i + 1) != fastestRoute.Count())
                 {
                     //(fastestRoute[i], fastestRoute[i + 1]);
-                    Point point = fastestRoute[i];
-                    point.X += tsp.canvasOffset.X + 2;
-                    point.Y += tsp.canvasOffset.Y + 2;
+                    Point p1 = fastestRoute[i];
+                    Point p2 = fastestRoute[i + 1];
+                    p1.X += tsp.canvasOffset.X + 2;
+                    p1.Y += tsp.canvasOffset.Y + 2;
+                    p2.X += tsp.canvasOffset.X + 2;
+                    p2.Y += tsp.canvasOffset.Y + 2;
 
-                    pathLine.Points.Add(point);
+                    //pathLine.Points.Add(point);
+
+                    Shape pathLine = DrawLinkArrow(p1, p2);
+
+                    canvas.Children.Insert(0, pathLine);
                 }
             }
-            canvas.Children.Insert(0, pathLine);
+        }
+
+        //Taken (and adapted based off comments) from (and adapted based off comments): https://stackoverflow.com/questions/5188877/how-to-have-arrow-symbol-on-a-line-in-c-wpf
+        private static Shape DrawLinkArrow(Point p1, Point p2) 
+        {
+            GeometryGroup lineGroup = new GeometryGroup();
+            double theta = Math.Atan2((p2.Y - p1.Y), (p2.X - p1.X)) * 180 / Math.PI;
+
+            PathGeometry pathGeometry = new PathGeometry();
+            PathFigure pathFigure = new PathFigure();
+            Point p = new Point(p1.X + ((p2.X - p1.X) / 1), p1.Y + ((p2.Y - p1.Y) / 1));
+            pathFigure.StartPoint = p;
+
+            Point lpoint = new Point(p.X + 3, p.Y + 5);
+            Point rpoint = new Point(p.X - 3, p.Y + 5);
+            LineSegment seg1 = new LineSegment();
+            seg1.Point = lpoint;
+            pathFigure.Segments.Add(seg1);
+
+            LineSegment seg2 = new LineSegment();
+            seg2.Point = rpoint;
+            pathFigure.Segments.Add(seg2);
+
+            LineSegment seg3 = new LineSegment();
+            seg3.Point = p;
+            pathFigure.Segments.Add(seg3);
+
+            pathGeometry.Figures.Add(pathFigure);
+            RotateTransform transform = new RotateTransform();
+            transform.Angle = theta + 90;
+            transform.CenterX = p.X;
+            transform.CenterY = p.Y;
+            pathGeometry.Transform = transform;
+            lineGroup.Children.Add(pathGeometry);
+
+            LineGeometry connectorGeometry = new LineGeometry();
+            connectorGeometry.StartPoint = p1;
+            connectorGeometry.EndPoint = p2;
+            lineGroup.Children.Add(connectorGeometry);
+            System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
+            path.Data = lineGroup;
+            path.StrokeThickness = 1;
+            path.Stroke = Brushes.Black;
+
+            return path;
         }
 
         #endregion
@@ -225,12 +273,39 @@ namespace TravelingSalesPerson
                 displayRunTime();
                 drawLines(tempResult);
             }
+            else if (type == "dfs")
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                List<Point> tempResult = tsp.BruteForce();
+                sw.Stop();
+
+                TimeSpan elapsedTime = sw.Elapsed;
+                string shortestDistance = String.Format("{0:0.00}", tsp.shortestDistance);
+                this.lblRunTime.Content = "Distance: " + shortestDistance + "\nRun Time: " + elapsedTime.ToString();
+
+                displayRunTime();
+                drawLines(tempResult);
+            }
+            else if (type == "bfs")
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                List<Point> tempResult = tsp.BruteForce();
+                sw.Stop();
+
+                TimeSpan elapsedTime = sw.Elapsed;
+                string shortestDistance = String.Format("{0:0.00}", tsp.shortestDistance);
+                this.lblRunTime.Content = "Distance: " + shortestDistance + "\nRun Time: " + elapsedTime.ToString();
+
+                displayRunTime();
+                drawLines(tempResult);
+            }
             else
             {
                 MessageBox.Show(type + " is not implemented yet");
             }
         }
 
+        //Implented from: https://dotnetlearning.wordpress.com/2011/02/20/dropdown-menu-in-wpf/
         private void btnSelectTSPType_Click(object sender, RoutedEventArgs e)
         {
             (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
