@@ -28,7 +28,7 @@ namespace TravelingSalesPerson
             this.maxPoint = points.First();
             this.tempFinalList = new List<Point>();
 
-            foreach(Point point in points)
+            foreach (Point point in points)
             {
                 this.points.Add(point);
             }
@@ -39,7 +39,7 @@ namespace TravelingSalesPerson
 
                 if (point.X < this.minPoint.X) { this.minPoint.X = point.X; }
                 else if (point.X > this.maxPoint.X) { this.maxPoint.X = point.X; }
-                if (point.Y < this.minPoint.Y) { this.minPoint.Y = point.Y; }                
+                if (point.Y < this.minPoint.Y) { this.minPoint.Y = point.Y; }
                 else if (point.Y > this.maxPoint.Y) { this.maxPoint.Y = point.Y; }
             }
 
@@ -115,7 +115,7 @@ namespace TravelingSalesPerson
             rest.RemoveAt(0);
 
             //Iterate through each permutaion
-            foreach(var perm in Permutate(rest, rest.Count()))
+            foreach (var perm in Permutate(rest, rest.Count()))
             {
                 double shortestSoFar = shortestDistance;
                 localDistance = 0;
@@ -165,9 +165,116 @@ namespace TravelingSalesPerson
             return finalList;
         }
 
-        public List<Point> DFS()
+        public List<Point> DFS(List<TSPConnection> tspConnections)
         {
             List<Point> finalList = new List<Point>();
+            List<TSPConnection> currentPath = new List<TSPConnection>();
+            TSPConnection currentCity = new TSPConnection();
+            double localDistance = 0;
+            int connection = 0;
+            shortestDistance = 0; //reset shortest distance just in case another algorithm was used and shortest distance still has that value
+            bool allConnectionsVisited = false;
+            tempFinalList.Clear();
+
+            currentCity = tspConnections.First();
+            Point finalCity = tspConnections.Last().startCity;
+            tempFinalList.Add(currentCity.startCity);
+
+            while (tspConnections.First().citiesVisited != 4)
+            {
+
+                currentCity = tspConnections.Find(x => x.startCity == tspConnections.ElementAt(connection).startCity);
+                currentCity.citiesVisited++;
+                if (currentCity.citiesVisited == 1)
+                {
+                    //Check if the first connection is the goal city
+                    if (currentCity.connection1 == finalCity)
+                    {
+                        tempFinalList.Add(finalCity);
+                        localDistance += distance(currentCity.startCity, finalCity);
+                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        {
+                            finalList.Clear();
+                            finalList.AddRange(tempFinalList);
+                            shortestDistance = localDistance;
+                        }
+
+                        tempFinalList.Remove(finalCity);
+                        localDistance -= distance(currentCity.startCity, finalCity);
+                        Point tempFinal = tempFinalList.Last();
+                        connection = tspConnections.FindIndex(x => x.startCity == tempFinal);
+                    }
+                    else
+                    {
+                        Point connection1 = currentCity.connection1 ?? new Point(0, 0);
+                        tempFinalList.Add(connection1);
+                        localDistance += distance(currentCity.startCity, connection1);
+                        connection = tspConnections.FindIndex(x => x.startCity == connection1);
+                    }
+                }
+                else if (currentCity.citiesVisited == 2 && currentCity.connection2 != null)
+                {
+                    if (currentCity.connection2 == finalCity)
+                    {
+                        tempFinalList.Add(finalCity);
+                        localDistance += distance(currentCity.startCity, finalCity);
+                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        {
+                            finalList.Clear();
+                            finalList.AddRange(tempFinalList);
+                            shortestDistance = localDistance;
+                        }
+
+                        tempFinalList.Remove(finalCity);
+                        localDistance -= distance(currentCity.startCity, finalCity);
+                        Point tempFinal = tempFinalList.Last();
+                        connection = tspConnections.FindIndex(x => x.startCity == tempFinal);
+                    }
+                    else
+                    {
+                        Point connection2 = currentCity.connection2 ?? new Point(0, 0);
+                        tempFinalList.Add(connection2);
+                        localDistance += distance(currentCity.startCity, connection2);
+                        connection = tspConnections.FindIndex(x => x.startCity == connection2);
+                    }
+                }
+                else if (currentCity.citiesVisited == 3 && currentCity.connection3 != null)
+                {
+                    if (currentCity.connection3 == finalCity)
+                    {
+                        tempFinalList.Add(finalCity);
+                        localDistance += distance(currentCity.startCity, finalCity);
+                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        {
+                            finalList.Clear();
+                            finalList.AddRange(tempFinalList);
+                            shortestDistance = localDistance;
+                        }
+
+                        tempFinalList.Remove(finalCity);
+                        localDistance -= distance(currentCity.startCity, finalCity);
+                        Point tempFinal = tempFinalList.Last();
+                        connection = tspConnections.FindIndex(x => x.startCity == tempFinal);
+                    }
+                    else
+                    {
+                        Point connection3 = currentCity.connection3 ?? new Point(0, 0);
+                        tempFinalList.Add(connection3);
+                        localDistance += distance(currentCity.startCity, connection3);
+                        connection = tspConnections.FindIndex(x => x.startCity == connection3);
+                    }
+                }
+                else if (currentCity.citiesVisited == 4 && connection != 0)
+                {
+                    Point connectionToRemove = tspConnections.ElementAt(connection).startCity;
+                    tempFinalList.Remove(connectionToRemove);
+                    currentCity.citiesVisited = 0;
+                    localDistance -= distance(tempFinalList.Last(), connectionToRemove);
+                    Point tempFinal = tempFinalList.Last();
+                    connection = tspConnections.FindIndex(x => x.startCity == tempFinal);
+                }
+
+            }
 
             return finalList;
         }

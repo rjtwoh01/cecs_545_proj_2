@@ -239,31 +239,6 @@ namespace TravelingSalesPerson
                         tspConnect.connection1 = new Point(tspPoints[10].X, tspPoints[10].Y);
                         break;
                 }
-                Debug.WriteLine((i+1) + ": (" + tspConnect.startCity.X + "," + tspConnect.startCity.Y + ")");
-                //if (tspConnect.connection1 != null) //we aren't on the last city
-                //{
-                //    Point connection = tspConnect.connection1 ?? new Point(0,0);
-                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
-
-                //    //canvas.Children.Insert(0, pathLine);
-                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
-                //}
-                //if (tspConnect.connection2 != null)
-                //{
-                //    Point connection = tspConnect.connection2 ?? new Point(0, 0);
-                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
-
-                //    //canvas.Children.Insert(0, pathLine);
-                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
-                //}
-                //if (tspConnect.connection3 != null)
-                //{
-                //    Point connection = tspConnect.connection3 ?? new Point(0, 0);
-                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
-
-                //    //canvas.Children.Insert(0, pathLine);
-                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
-                //}
                 tSPConnections.Add(tspConnect);
             }
             int city = 1;
@@ -365,7 +340,7 @@ namespace TravelingSalesPerson
             else if (type == "dfs")
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                List<Point> tempResult = tsp.BruteForce();
+                List<Point> tempResult = tsp.DFS(tSPConnections);
                 sw.Stop();
 
                 TimeSpan elapsedTime = sw.Elapsed;
@@ -422,7 +397,7 @@ namespace TravelingSalesPerson
             showSolveButton();
             type = "dfs";
             Debug.WriteLine(type);
-            setupBfsDfs();
+            setupBfsDfs();            
         }
 
 
