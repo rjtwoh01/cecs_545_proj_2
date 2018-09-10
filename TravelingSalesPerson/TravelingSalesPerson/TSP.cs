@@ -173,7 +173,6 @@ namespace TravelingSalesPerson
             double localDistance = 0;
             int connection = 0;
             shortestDistance = 0; //reset shortest distance just in case another algorithm was used and shortest distance still has that value
-            bool allConnectionsVisited = false;
             tempFinalList.Clear();
 
             currentCity = tspConnections.First();
@@ -277,6 +276,92 @@ namespace TravelingSalesPerson
             }
 
             return finalList;
+        }
+
+        public List<Point> BFS(List<TSPConnection> tspConnections)
+        {
+            List<Point> finalList = new List<Point>();
+            List<TSPConnection> currentPath = new List<TSPConnection>();
+            TSPConnection currentCity = new TSPConnection();
+            List<Point> usedCities = new List<Point>();
+            List<List<Point>> combinations = new List<List<Point>>();
+            List<List<Point>> tempCombinations = new List<List<Point>>();
+            bool found = false;
+            double localDistance = 0;
+            int connection = 0;
+            shortestDistance = 0; //reset shortest distance just in case another algorithm was used and shortest distance still has that value
+            tempFinalList.Clear();
+
+            currentCity = tspConnections.First();
+            Point finalCity = tspConnections.Last().startCity;
+            tempFinalList.Add(currentCity.startCity);
+            combinations.Add(copyLists(tempFinalList));
+            usedCities.Add(currentCity.startCity);
+
+            while (!found)
+            {
+                foreach (List<Point> var in combinations)
+                {
+                    tempFinalList.Clear();
+                    currentCity = tspConnections.Find(x => x.startCity == var.Last());
+                    Point connection1 = currentCity.connection1 ?? new Point(0, 0);
+                    Point connection2 = currentCity.connection2 ?? new Point(0, 0);
+                    Point connection3 = currentCity.connection3 ?? new Point(0, 0);
+                    if ((currentCity.connection1 != null && currentCity.connection2 != null && currentCity.connection3 != null) && (connection1 == finalCity || connection2 == finalCity || connection3 == finalCity))
+                    {
+                        found = true;
+                    }
+                    tempFinalList.AddRange(var);
+                    if(!usedCities.Contains(connection1))
+                    {
+                        tempFinalList.Add(connection1);
+                        usedCities.Add(connection1);
+                        tempCombinations.Add(copyLists(tempFinalList));
+                        tempFinalList.Clear();
+                        tempFinalList.AddRange(var);
+                    }
+                    if (currentCity.connection2 != null && !usedCities.Contains(connection2))
+                    {
+                        tempFinalList.Add(connection2);
+                        usedCities.Add(connection2);
+                        tempCombinations.Add(copyLists(tempFinalList));
+                        tempFinalList.Clear();
+                        tempFinalList.AddRange(var);
+                    }
+                    if (currentCity.connection3 != null && !usedCities.Contains(connection3))
+                    {
+                        tempFinalList.Add(connection3);
+                        usedCities.Add(connection3);
+                        tempCombinations.Add(copyLists(tempFinalList));
+                        tempFinalList.Clear();
+                        tempFinalList.AddRange(var);
+                    }
+                }
+                combinations.Clear();
+                combinations.AddRange(tempCombinations);
+                tempCombinations.Clear();
+            }
+
+            tempFinalList.Clear();
+            tempFinalList.AddRange(combinations[0]);
+            for (int i = 0; i < tempFinalList.Count - 1; i++)
+            {
+                localDistance += distance(tempFinalList[i], tempFinalList[i + 1]);
+            }
+            shortestDistance = localDistance;
+            foreach (Point p in tempFinalList)
+            {
+                finalList.Add(p);
+            }
+
+            return finalList;
+        }
+
+        public List<Point> copyLists(List<Point> temp)
+        {
+            List<Point> temp2 = new List<Point>();
+            temp2.AddRange(temp);
+            return temp2;
         }
 
         #region Permutation

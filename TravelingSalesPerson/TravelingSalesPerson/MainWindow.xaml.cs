@@ -190,7 +190,7 @@ namespace TravelingSalesPerson
         
         public void setupBfsDfs()
         {
-            tSPConnections = new List<TSPConnection>();
+            tSPConnections.Clear();
             Polygon polyLine = new Polygon();
             polyLine.Stroke = Brushes.Black;
 
@@ -353,7 +353,7 @@ namespace TravelingSalesPerson
             else if (type == "bfs")
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                List<Point> tempResult = tsp.BruteForce();
+                List<Point> tempResult = tsp.BFS(tSPConnections);
                 sw.Stop();
 
                 TimeSpan elapsedTime = sw.Elapsed;
@@ -379,6 +379,10 @@ namespace TravelingSalesPerson
 
         private void bruteForceClick(object sender, RoutedEventArgs e)
         {
+            if (canvas != null)
+                this.canvas.Children.Clear();
+            if (tspPoints.Count() != 0)
+                plotPoints(tspPoints);
             showSolveButton();
             type = "bruteForce";
             Debug.WriteLine(type);
@@ -386,6 +390,10 @@ namespace TravelingSalesPerson
 
         private void bfsClick(object sender, RoutedEventArgs e)
         {
+            if (canvas != null)
+                this.canvas.Children.Clear();
+            if (tspPoints.Count() != 0)
+                plotPoints(tspPoints);
             showSolveButton();
             type = "bfs";
             Debug.WriteLine(type);
@@ -394,6 +402,10 @@ namespace TravelingSalesPerson
 
         private void dfsClick(object sender, RoutedEventArgs e)
         {
+            if (canvas != null)
+                this.canvas.Children.Clear();
+            if (tspPoints.Count() != 0)
+                plotPoints(tspPoints);
             showSolveButton();
             type = "dfs";
             Debug.WriteLine(type);
