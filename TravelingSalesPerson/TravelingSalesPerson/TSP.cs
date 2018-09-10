@@ -191,7 +191,7 @@ namespace TravelingSalesPerson
                     {
                         tempFinalList.Add(finalCity);
                         localDistance += distance(currentCity.startCity, finalCity);
-                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        if (shortestDistance > localDistance || shortestDistance == 0)
                         {
                             finalList.Clear();
                             finalList.AddRange(tempFinalList);
@@ -217,7 +217,7 @@ namespace TravelingSalesPerson
                     {
                         tempFinalList.Add(finalCity);
                         localDistance += distance(currentCity.startCity, finalCity);
-                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        if (shortestDistance > localDistance || shortestDistance == 0)
                         {
                             finalList.Clear();
                             finalList.AddRange(tempFinalList);
@@ -243,7 +243,7 @@ namespace TravelingSalesPerson
                     {
                         tempFinalList.Add(finalCity);
                         localDistance += distance(currentCity.startCity, finalCity);
-                        if (shortestDistance < localDistance || shortestDistance == 0)
+                        if (shortestDistance > localDistance || shortestDistance == 0)
                         {
                             finalList.Clear();
                             finalList.AddRange(tempFinalList);
