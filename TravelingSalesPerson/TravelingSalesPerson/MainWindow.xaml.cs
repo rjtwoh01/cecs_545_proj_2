@@ -20,6 +20,8 @@ namespace TravelingSalesPerson
         private Viewbox viewbox;
         private TSP tsp;
         private string type;
+        private TSP bfsDfsTsp;
+        private List<TSPConnection> tSPConnections;
 
 
         public MainWindow()
@@ -31,6 +33,7 @@ namespace TravelingSalesPerson
             hideSolveButton();
             hideType();
             tspPoints = new List<Point>();
+            tSPConnections = new List<TSPConnection>();
         }
 
         #region Data Points
@@ -184,6 +187,92 @@ namespace TravelingSalesPerson
 
             return path;
         }
+        
+        public void setupBfsDfs()
+        {
+            tSPConnections = new List<TSPConnection>();
+            Polygon polyLine = new Polygon();
+            polyLine.Stroke = Brushes.Black;
+
+            //For this, we have to act on the assumption that the only file being provided is the 11 point one with the known (outside of the program) path
+            for (int i = 0; i <= 10; i++)
+            {
+                TSPConnection tspConnect = new TSPConnection(tspPoints[i].X, tspPoints[i].Y);
+                switch (i) { 
+                    case 0:                        
+                        tspConnect.connection1 = new Point(tspPoints[1].X, tspPoints[1].Y);
+                        tspConnect.connection2 = new Point(tspPoints[2].X, tspPoints[2].Y);
+                        tspConnect.connection3 = new Point(tspPoints[3].X, tspPoints[3].Y);
+                        break;
+                    case 1:
+                        tspConnect.connection1 = new Point(tspPoints[2].X, tspPoints[2].Y);
+                        break;
+                    case 2:
+                        tspConnect.connection1 = new Point(tspPoints[3].X, tspPoints[3].Y);
+                        tspConnect.connection2 = new Point(tspPoints[4].X, tspPoints[4].Y);
+                        break;
+                    case 3:
+                        tspConnect.connection1 = new Point(tspPoints[4].X, tspPoints[4].Y);
+                        tspConnect.connection2 = new Point(tspPoints[5].X, tspPoints[5].Y);
+                        tspConnect.connection3 = new Point(tspPoints[6].X, tspPoints[6].Y);
+                        break;
+                    case 4:
+                        tspConnect.connection1 = new Point(tspPoints[6].X, tspPoints[6].Y);
+                        tspConnect.connection2 = new Point(tspPoints[7].X, tspPoints[7].Y);
+                        break;
+                    case 5:
+                        tspConnect.connection1 = new Point(tspPoints[7].X, tspPoints[7].Y);
+                        break;
+                    case 6:
+                        tspConnect.connection1 = new Point(tspPoints[8].X, tspPoints[8].Y);
+                        tspConnect.connection2 = new Point(tspPoints[9].X, tspPoints[9].Y);
+                        break;
+                    case 7:
+                        tspConnect.connection1 = new Point(tspPoints[8].X, tspPoints[8].Y);
+                        tspConnect.connection2 = new Point(tspPoints[9].X, tspPoints[9].Y);
+                        tspConnect.connection3 = new Point(tspPoints[10].X, tspPoints[10].Y);
+                        break;
+                    case 8:
+                        tspConnect.connection1 = new Point(tspPoints[10].X, tspPoints[10].Y);
+                        break;
+                    case 9:
+                        tspConnect.connection1 = new Point(tspPoints[10].X, tspPoints[10].Y);
+                        break;
+                }
+                Debug.WriteLine((i+1) + ": (" + tspConnect.startCity.X + "," + tspConnect.startCity.Y + ")");
+                //if (tspConnect.connection1 != null) //we aren't on the last city
+                //{
+                //    Point connection = tspConnect.connection1 ?? new Point(0,0);
+                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
+
+                //    //canvas.Children.Insert(0, pathLine);
+                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
+                //}
+                //if (tspConnect.connection2 != null)
+                //{
+                //    Point connection = tspConnect.connection2 ?? new Point(0, 0);
+                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
+
+                //    //canvas.Children.Insert(0, pathLine);
+                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
+                //}
+                //if (tspConnect.connection3 != null)
+                //{
+                //    Point connection = tspConnect.connection3 ?? new Point(0, 0);
+                //    //Shape pathLine = DrawLinkArrow(tspConnect.startCity, connection);
+
+                //    //canvas.Children.Insert(0, pathLine);
+                //    Debug.WriteLine((i + 1) + ": (" + connection.X + "," + connection.Y + ")");
+                //}
+                tSPConnections.Add(tspConnect);
+            }
+            int city = 1;
+            foreach(TSPConnection tspConnect in tSPConnections)
+            {
+                Debug.WriteLine(city + ":" + tspConnect);
+                city++;
+            }
+        }
 
         #endregion
 
@@ -325,6 +414,7 @@ namespace TravelingSalesPerson
             showSolveButton();
             type = "bfs";
             Debug.WriteLine(type);
+            setupBfsDfs();
         }
 
         private void dfsClick(object sender, RoutedEventArgs e)
@@ -332,6 +422,7 @@ namespace TravelingSalesPerson
             showSolveButton();
             type = "dfs";
             Debug.WriteLine(type);
+            setupBfsDfs();
         }
 
 

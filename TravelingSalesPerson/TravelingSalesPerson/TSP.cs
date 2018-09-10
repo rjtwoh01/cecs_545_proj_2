@@ -16,6 +16,7 @@ namespace TravelingSalesPerson
         public Point minPoint;
         public List<Point> points;
         public List<Point> tempFinalList;
+        public List<TSPConnection> connectedPoints;
 
         public double shortestDistance;
 
@@ -39,6 +40,40 @@ namespace TravelingSalesPerson
                 if (point.X < this.minPoint.X) { this.minPoint.X = point.X; }
                 else if (point.X > this.maxPoint.X) { this.maxPoint.X = point.X; }
                 if (point.Y < this.minPoint.Y) { this.minPoint.Y = point.Y; }                
+                else if (point.Y > this.maxPoint.Y) { this.maxPoint.Y = point.Y; }
+            }
+
+            this.canvasOffset = new Point(10, 10);
+
+            if (this.minPoint.X > 0) { this.canvasOffset.X -= this.minPoint.X; }
+            else { this.canvasOffset.X += this.minPoint.X; }
+            if (this.minPoint.Y > 0) { this.canvasOffset.X -= this.minPoint.X; }
+            else { this.canvasOffset.X += this.minPoint.X; }
+
+            this.shortestDistance = 0;
+        }
+
+        //Setup for DFS and BFS
+        public TSP(List<TSPConnection> tSPConnections)
+        {
+            this.connectedPoints = new List<TSPConnection>();
+
+            this.minPoint = tSPConnections.First().startCity;
+            this.maxPoint = tSPConnections.First().startCity;
+            this.tempFinalList = new List<Point>();
+
+            foreach (TSPConnection point in connectedPoints)
+            {
+                this.connectedPoints.Add(point);
+            }
+
+            for (int i = 0; i < connectedPoints.Count; i++)
+            {
+                Point point = new Point(connectedPoints[i].startCity.X, connectedPoints[i].startCity.Y);
+
+                if (point.X < this.minPoint.X) { this.minPoint.X = point.X; }
+                else if (point.X > this.maxPoint.X) { this.maxPoint.X = point.X; }
+                if (point.Y < this.minPoint.Y) { this.minPoint.Y = point.Y; }
                 else if (point.Y > this.maxPoint.Y) { this.maxPoint.Y = point.Y; }
             }
 
