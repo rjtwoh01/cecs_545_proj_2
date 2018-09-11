@@ -348,8 +348,8 @@ namespace TravelingSalesPerson
             }
 
             tempFinalList.Clear();
-            //the final list is in combinations[0]
-            tempFinalList.AddRange(combinations[0]);
+            //the final list is in combinations.first
+            tempFinalList.AddRange(combinations.First());
             for (int i = 0; i < tempFinalList.Count - 1; i++)
             {
                 localDistance += distance(tempFinalList[i], tempFinalList[i + 1]);
