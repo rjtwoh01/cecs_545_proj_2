@@ -143,7 +143,7 @@ namespace TravelingSalesPerson
             }
         }
 
-        //Taken (and adapted based off comments) from (and adapted based off comments): https://stackoverflow.com/questions/5188877/how-to-have-arrow-symbol-on-a-line-in-c-wpf
+        //Taken (and adapted based off comments) from (and adapted based off comments): https://stackoverflow.com/a/5203530
         private static Shape DrawLinkArrow(Point p1, Point p2) 
         {
             GeometryGroup lineGroup = new GeometryGroup();

@@ -191,6 +191,8 @@ namespace TravelingSalesPerson
                     {
                         tempFinalList.Add(finalCity);
                         localDistance += distance(currentCity.startCity, finalCity);
+                        //If this distance of the list is now less than the previous shortest distance
+                        //we need to copy this list over to the final list                    
                         if (shortestDistance > localDistance || shortestDistance == 0)
                         {
                             finalList.Clear();
@@ -263,6 +265,7 @@ namespace TravelingSalesPerson
                         connection = tspConnections.FindIndex(x => x.startCity == connection3);
                     }
                 }
+                //We have exhausted all possible connections, time to remove and try again
                 else if (currentCity.citiesVisited == 4 && connection != 0)
                 {
                     Point connectionToRemove = tspConnections.ElementAt(connection).startCity;
@@ -300,16 +303,18 @@ namespace TravelingSalesPerson
 
             while (!found)
             {
+                //Each possible combination needs to be iterated through
                 foreach (List<Point> var in combinations)
                 {
                     tempFinalList.Clear();
+                    //we start at the top and see if we can find the fastest route to the final city
                     currentCity = tspConnections.Find(x => x.startCity == var.Last());
                     Point connection1 = currentCity.connection1 ?? new Point(0, 0);
                     Point connection2 = currentCity.connection2 ?? new Point(0, 0);
                     Point connection3 = currentCity.connection3 ?? new Point(0, 0);
                     if ((currentCity.connection1 != null && currentCity.connection2 != null && currentCity.connection3 != null) && (connection1 == finalCity || connection2 == finalCity || connection3 == finalCity))
                     {
-                        found = true;
+                        found = true; //we are done
                     }
                     tempFinalList.AddRange(var);
                     if(!usedCities.Contains(connection1))
@@ -343,6 +348,7 @@ namespace TravelingSalesPerson
             }
 
             tempFinalList.Clear();
+            //the final list is in combinations[0]
             tempFinalList.AddRange(combinations[0]);
             for (int i = 0; i < tempFinalList.Count - 1; i++)
             {
